@@ -1,6 +1,7 @@
 const userModel = require('../models/userModel');
 const { AppError } = require('../utils/errors');
-
+const { generateToken } = require('../utils/jwt');
+const bcrypt = require('bcrypt');
 /**
  * Create a new user
  */
@@ -21,6 +22,19 @@ const createUser = async (userData) => {
   return user;
 };
 
+const loginUser = async (userData) => {
+  const user = await userModel.findByEmail(userData.email);
+  if (!user) {
+    throw new AppError('User not found', 404);
+  }
+  const isPasswordValid = await bcrypt.compare(userData.password, user.password);
+  if (!isPasswordValid) {
+    throw new AppError('Invalid password', 401);
+  }
+  const token = generateToken({ userId: user._id });
+  return token;
+};
 module.exports = {
-  createUser
+  createUser,
+  loginUser
 };
