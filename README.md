@@ -6,45 +6,54 @@ A Node.js REST API for managing personal finances with income/expense tracking, 
 
 ```
 FinEdge_C17_Group4/
-├── config/                 # Configuration files
-│   ├── config.js          # App configuration
-│   └── database.js        # Database initialization
-├── controllers/           # Request handlers (MVC - Controllers)
-│   ├── transactionController.js
-│   ├── userController.js
-│   └── summaryController.js
-├── middleware/            # Custom middleware
-│   ├── errorHandler.js    # Global error handler
-│   ├── requestLogger.js   # Request logging
-│   ├── validateTransaction.js  # Transaction validation
-│   └── rateLimiter.js    # Rate limiting
-├── models/                # Data models (MVC - Models)
-│   ├── userModel.js
-│   ├── transactionModel.js
-│   └── budgetModel.js
-├── routes/                # Route definitions
-│   ├── healthRoutes.js
-│   ├── userRoutes.js
-│   ├── transactionRoutes.js
-│   └── summaryRoutes.js
-├── services/              # Business logic layer
-│   ├── userService.js
-│   ├── transactionService.js
-│   └── summaryService.js
-├── utils/                 # Utility functions
-│   ├── errors.js         # Custom error classes
-│   └── cacheService.js   # In-memory cache with TTL
-├── tests/                 # Test files
-│   ├── health.test.js
-│   └── transaction.test.js
-├── data/                  # JSON file storage
-│   ├── users.json
-│   ├── transactions.json
-│   └── budgets.json
-├── app.js                 # Express app setup
-├── server.js              # Server entry point
+├── src/
+│   ├── config/                 # Configuration files
+│   │   ├── config.js          # App configuration
+│   │   └── database.js        # MongoDB connection
+│   ├── controllers/           # Request handlers (MVC - Controllers)
+│   │   ├── transactionController.js
+│   │   ├── userController.js
+│   │   └── summaryController.js
+│   ├── middleware/            # Custom middleware
+│   │   ├── errorHandler.js    # Global error handler
+│   │   ├── requestLogger.js   # Request logging
+│   │   ├── validateJoi.js     # Joi validation middleware
+│   │   ├── validateTransaction.js  # Transaction validation
+│   │   ├── authMiddleware.js  # JWT authentication
+│   │   └── rateLimiter.js    # Rate limiting
+│   ├── models/                # Data models (MVC - Models)
+│   │   ├── schemas/           # Mongoose schemas
+│   │   │   ├── userSchema.js
+│   │   │   ├── transactionSchema.js
+│   │   │   └── budgetSchema.js
+│   │   ├── userModel.js
+│   │   ├── transactionModel.js
+│   │   └── budgetModel.js
+│   ├── routes/                # Route definitions
+│   │   ├── healthRoutes.js
+│   │   ├── userRoutes.js
+│   │   ├── transactionRoutes.js
+│   │   └── summaryRoutes.js
+│   ├── services/              # Business logic layer
+│   │   ├── userService.js
+│   │   ├── transactionService.js
+│   │   └── summaryService.js
+│   ├── utils/                 # Utility functions
+│   │   ├── errors.js         # Custom error classes
+│   │   ├── cacheService.js   # In-memory cache with TTL
+│   │   └── jwt.js            # JWT token utilities
+│   ├── validations/           # Joi validation schemas
+│   │   ├── userSchema.js
+│   │   ├── transactionsSchema.js
+│   │   └── summarySchema.js
+│   ├── tests/                 # Test files
+│   │   ├── health.test.js
+│   │   └── transaction.test.js
+│   ├── app.js                 # Express app setup
+│   └── server.js              # Server entry point
 ├── package.json
 ├── .env.example
+├── .gitignore
 └── README.md
 ```
 
@@ -53,6 +62,7 @@ FinEdge_C17_Group4/
 ### Prerequisites
 - Node.js (v14 or higher)
 - npm
+- MongoDB (local installation or MongoDB Atlas account)
 
 ### Installation
 
@@ -61,13 +71,30 @@ FinEdge_C17_Group4/
    npm install
    ```
 
-2. **Set up environment variables:**
+2. **Set up MongoDB:**
+   
+   **Option A: Local MongoDB**
+   - Install MongoDB locally: [MongoDB Installation Guide](https://www.mongodb.com/docs/manual/installation/)
+   - Start MongoDB service
+   - Default connection: `mongodb://localhost:27017/finedge`
+   
+   **Option B: MongoDB Atlas (Cloud)**
+   - Create a free account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+   - Create a cluster and get your connection string
+   - Format: `mongodb+srv://username:password@cluster.mongodb.net/finedge`
+
+3. **Set up environment variables:**
    ```bash
    cp .env.example .env
    ```
-   Edit `.env` with your configuration.
+   Edit `.env` and set your `MONGO_URL`:
+   ```env
+   MONGO_URL=mongodb://localhost:27017/finedge
+   # or for Atlas:
+   # MONGO_URL=mongodb+srv://username:password@cluster.mongodb.net/finedge
+   ```
 
-3. **Start the server:**
+4. **Start the server:**
    ```bash
    npm start
    ```
@@ -76,10 +103,65 @@ FinEdge_C17_Group4/
    npm run dev
    ```
 
-4. **Run tests:**
+5. **Run tests:**
    ```bash
    npm test
    ```
+
+## 🗄️ Database
+
+This project uses **MongoDB** with **Mongoose ODM** for data persistence.
+
+### Database Structure
+
+- **Users Collection**: Stores user accounts with authentication data
+- **Transactions Collection**: Stores income and expense transactions
+- **Budgets Collection**: Stores monthly budget goals and savings targets
+
+### Mongoose Schemas
+
+All schemas are defined in `src/models/schemas/`:
+- `userSchema.js` - User model with email validation
+- `transactionSchema.js` - Transaction model with type, category, amount
+- `budgetSchema.js` - Budget model with monthly goals
+
+### Features
+
+- ✅ Automatic `createdAt` and `updatedAt` timestamps
+- ✅ Data validation at schema level
+- ✅ Indexes for optimized queries
+- ✅ Automatic `_id` to `id` transformation in JSON responses
+- ✅ Support for filtering and querying
+
+## ✅ Data Validation
+
+The project uses **Joi** for request validation with a reusable middleware.
+
+### Validation Middleware
+
+- **Location**: `src/middleware/validateJoi.js`
+- **Usage**: Pass a Joi schema to validate request body
+- **Features**: 
+  - Validates all fields
+  - Strips unknown fields
+  - Converts types automatically
+  - Returns formatted error messages
+
+### Validation Schemas
+
+Pre-defined schemas in `src/validations/`:
+- `userSchema.js` - User registration validation
+- `transactionsSchema.js` - Transaction creation/update validation
+- `summarySchema.js` - Summary query validation
+
+### Example Usage
+
+```javascript
+const { validateJoi } = require('../middleware/validateJoi');
+const { userRegistrationSchema } = require('../validations/userSchema');
+
+router.post('/', validateJoi(userRegistrationSchema), controller.create);
+```
 
 ## 📋 API Endpoints
 
@@ -129,11 +211,11 @@ FinEdge_C17_Group4/
 - [x] `GET /summary` - Fetch income-expense summary
 
 **Files to work on:**
-- `models/userModel.js` - Add user authentication logic
-- `models/transactionModel.js` - Enhance with filtering
-- `models/budgetModel.js` - Complete budget CRUD
-- `controllers/*.js` - Test and refine controllers
-- `services/*.js` - Add business logic validation
+- `src/models/userModel.js` - User authentication logic (with bcrypt)
+- `src/models/transactionModel.js` - Enhanced with filtering capabilities
+- `src/models/budgetModel.js` - Complete budget CRUD operations
+- `src/controllers/*.js` - Test and refine controllers
+- `src/services/*.js` - Add business logic validation
 
 **Status:** 🟡 In Progress (Structure ready, needs testing & refinement)
 
@@ -149,9 +231,10 @@ FinEdge_C17_Group4/
 - [x] Transaction validation middleware
 
 **Files to work on:**
-- `middleware/errorHandler.js` - Enhance error handling
-- `middleware/requestLogger.js` - Add more logging details
-- `middleware/validateTransaction.js` - Complete validation rules
+- `src/middleware/errorHandler.js` - Enhance error handling
+- `src/middleware/requestLogger.js` - Add more logging details
+- `src/middleware/validateJoi.js` - Joi validation middleware (✅ Implemented)
+- `src/middleware/validateTransaction.js` - Complete validation rules
 - Review all async/await usage in models and services
 
 **Status:** 🟡 In Progress (Basic implementation done, needs enhancement)
@@ -166,15 +249,15 @@ FinEdge_C17_Group4/
 - [x] Reusable services for business logic
 - [x] Environment variables configuration
 - [x] Custom error classes
-- [x] fs/promises for file persistence
+- [x] MongoDB for data persistence (✅ Implemented)
 - [ ] Test cases for core endpoints
 
 **Files to work on:**
-- `tests/health.test.js` - Complete test suite
-- `tests/transaction.test.js` - Add more test cases
-- `tests/user.test.js` - Create user tests
-- `tests/summary.test.js` - Create summary tests
-- `utils/jwt.js` - Implement JWT authentication (bonus)
+- `src/tests/health.test.js` - Complete test suite
+- `src/tests/transaction.test.js` - Add more test cases
+- `src/tests/user.test.js` - Create user tests
+- `src/tests/summary.test.js` - Create summary tests
+- `src/utils/jwt.js` - JWT authentication utilities (✅ Implemented)
 
 **Status:** 🟡 In Progress (Structure ready, tests need completion)
 
@@ -193,10 +276,10 @@ FinEdge_C17_Group4/
 - [ ] Category-wise spending breakdown
 
 **Files to create/enhance:**
-- `services/analyticsService.js` - New service for analytics
-- `controllers/analyticsController.js` - New controller
-- `routes/analyticsRoutes.js` - New routes
-- Enhance `summaryService.js` with filtering
+- `src/services/analyticsService.js` - New service for analytics
+- `src/controllers/analyticsController.js` - New controller
+- `src/routes/analyticsRoutes.js` - New routes
+- Enhance `src/services/summaryService.js` with filtering
 
 ---
 
@@ -209,15 +292,16 @@ FinEdge_C17_Group4/
 - [ ] Real-time updates on new transactions
 
 **Files to create:**
-- `services/aiService.js` - AI/automation logic
-- `utils/categoryMatcher.js` - Keyword matching for auto-categorization
-- `services/budgetSuggestionService.js` - Budget suggestions
+- `src/services/aiService.js` - AI/automation logic
+- `src/utils/categoryMatcher.js` - Keyword matching for auto-categorization
+- `src/services/budgetSuggestionService.js` - Budget suggestions
 
 ---
 
 #### **Option C: Data Persistence** ✅ Already Implemented
-- JSON file storage using fs/promises
-- MongoDB integration can be added later
+- MongoDB database integration (✅ Implemented)
+- Mongoose ODM for schema management
+- Automatic timestamps and data validation
 
 ---
 
@@ -231,17 +315,17 @@ FinEdge_C17_Group4/
 - [x] In-memory cache service with TTL expiry (used in `/summary`)
 
 **Files to enhance:**
-- `middleware/rateLimiter.js` - Apply to routes
-- `utils/cacheService.js` - Already implemented, enhance if needed
+- `src/middleware/rateLimiter.js` - Apply to routes
+- `src/utils/cacheService.js` - Already implemented, enhance if needed
 
 ---
 
-## 🔐 JWT Authentication (Bonus)
+## 🔐 JWT Authentication (Bonus) ✅ Implemented
 
-**Files to create:**
-- `middleware/authMiddleware.js` - JWT verification
-- `utils/jwt.js` - JWT token generation/verification
-- Update routes to use auth middleware
+**Files:**
+- `src/middleware/authMiddleware.js` - JWT verification (✅ Implemented)
+- `src/utils/jwt.js` - JWT token generation/verification (✅ Implemented)
+- Update routes to use auth middleware (in progress)
 
 ## 📝 Development Guidelines
 
@@ -281,7 +365,10 @@ npm run test:watch
 ### Production
 - `express` - Web framework
 - `dotenv` - Environment variables
+- `mongoose` - MongoDB ODM
 - `jsonwebtoken` - JWT authentication
+- `bcrypt` - Password hashing
+- `joi` - Data validation
 - `cors` - CORS middleware
 - `express-rate-limit` - Rate limiting
 
@@ -297,7 +384,11 @@ npm run test:watch
 - ✅ Async/Await Programming
 - ✅ Middleware Implementation
 - ✅ Error Handling
-- ✅ File I/O with fs/promises
+- ✅ MongoDB Database Integration
+- ✅ Mongoose ODM
+- ✅ Joi Data Validation
+- ✅ JWT Authentication
+- ✅ Password Hashing (bcrypt)
 - ✅ Environment Variables
 - ✅ Modular Code Structure
 - ✅ Testing with Jest
@@ -310,8 +401,10 @@ npm run test:watch
 2. **Set up development environment** - Each member should:
    - Clone the repository
    - Run `npm install`
-   - Create `.env` file from `.env.example`
+   - Set up MongoDB (local or Atlas)
+   - Create `.env` file from `.env.example` and configure `MONGO_URL`
    - Test `/health` endpoint
+   - Verify MongoDB connection on server start
 3. **Start implementing** assigned tasks
 4. **Regular sync meetings** to discuss progress and merge conflicts
 5. **Test thoroughly** before final submission
@@ -319,8 +412,13 @@ npm run test:watch
 ## 🐛 Troubleshooting
 
 - **Port already in use:** Change `PORT` in `.env`
-- **Database errors:** Ensure `data/` directory exists and is writable
+- **MongoDB connection errors:** 
+  - Ensure MongoDB is running (local) or check Atlas connection string
+  - Verify `MONGO_URL` in `.env` is correct
+  - Check network/firewall settings for Atlas
 - **Module not found:** Run `npm install` again
+- **Validation errors:** Check Joi schema definitions in `src/validations/`
+- **JWT errors:** Verify `JWT_SECRET` is set in `.env`
 
 ---
 
