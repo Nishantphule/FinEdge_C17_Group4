@@ -36,3 +36,5 @@ data/*.json
 # Build files
 dist/
 build/
+
+*.md
