@@ -137,7 +137,6 @@ const createTransaction = async (transactionData) => {
 ```
 FinEdge_C17_Group4/
 ├── src/
-<<<<<<< HEAD
 │   ├── config/                 # Configuration
 │   │   ├── config.js          # App configuration
 │   │   └── database.js        # MongoDB connection
@@ -155,23 +154,6 @@ FinEdge_C17_Group4/
 │   │   ├── authMiddleware.js  # JWT authentication
 │   │   └── rateLimiter.js    # Rate limiting
 │   ├── models/                # Data models (MVC)
-=======
-│   ├── config/                 # Configuration files
-│   │   ├── config.js          # App configuration
-│   │   └── database.js        # MongoDB connection
-│   ├── controllers/           # Request handlers (MVC - Controllers)
-│   │   ├── transactionController.js
-│   │   ├── userController.js
-│   │   └── summaryController.js
-│   ├── middleware/            # Custom middleware
-│   │   ├── errorHandler.js    # Global error handler
-│   │   ├── requestLogger.js   # Request logging
-│   │   ├── validateJoi.js     # Joi validation middleware
-│   │   ├── validateTransaction.js  # Transaction validation
-│   │   ├── authMiddleware.js  # JWT authentication
-│   │   └── rateLimiter.js    # Rate limiting
-│   ├── models/                # Data models (MVC - Models)
->>>>>>> 2efa46fa319dca3224bbfc2b497390c7850cc72f
 │   │   ├── schemas/           # Mongoose schemas
 │   │   │   ├── userSchema.js
 │   │   │   ├── transactionSchema.js
@@ -183,7 +165,6 @@ FinEdge_C17_Group4/
 │   │   ├── healthRoutes.js
 │   │   ├── userRoutes.js
 │   │   ├── transactionRoutes.js
-<<<<<<< HEAD
 │   │   ├── summaryRoutes.js
 │   │   ├── analyticsRoutes.js
 │   │   └── aiRoutes.js
@@ -199,34 +180,16 @@ FinEdge_C17_Group4/
 │   │   ├── jwt.js            # JWT utilities
 │   │   └── categoryMatcher.js # AI category matching
 │   ├── validations/           # Joi schemas
-=======
-│   │   └── summaryRoutes.js
-│   ├── services/              # Business logic layer
-│   │   ├── userService.js
-│   │   ├── transactionService.js
-│   │   └── summaryService.js
-│   ├── utils/                 # Utility functions
-│   │   ├── errors.js         # Custom error classes
-│   │   ├── cacheService.js   # In-memory cache with TTL
-│   │   └── jwt.js            # JWT token utilities
-│   ├── validations/           # Joi validation schemas
->>>>>>> 2efa46fa319dca3224bbfc2b497390c7850cc72f
 │   │   ├── userSchema.js
 │   │   ├── transactionsSchema.js
 │   │   └── summarySchema.js
 │   ├── tests/                 # Test files
-<<<<<<< HEAD
 │   │   ├── setup.js          # Test configuration
 │   │   ├── health.test.js
 │   │   ├── transaction.test.js
 │   │   ├── user.test.js
 │   │   └── summary.test.js
 │   ├── app.js                 # Express app
-=======
-│   │   ├── health.test.js
-│   │   └── transaction.test.js
-│   ├── app.js                 # Express app setup
->>>>>>> 2efa46fa319dca3224bbfc2b497390c7850cc72f
 │   └── server.js              # Server entry point
 ├── package.json
 ├── jest.config.js            # Jest configuration
@@ -242,11 +205,7 @@ FinEdge_C17_Group4/
 ### Prerequisites
 - Node.js (v14+)
 - npm
-<<<<<<< HEAD
 - MongoDB (local or Atlas)
-=======
-- MongoDB (local installation or MongoDB Atlas account)
->>>>>>> 2efa46fa319dca3224bbfc2b497390c7850cc72f
 
 ### Installation
 
@@ -255,18 +214,6 @@ FinEdge_C17_Group4/
    npm install
    ```
 
-<<<<<<< HEAD
-2. **Configure environment:**
-   ```bash
-   cp .env.example .env
-   ```
-   Edit `.env` and set `MONGO_URL`:
-   ```env
-   MONGO_URL=mongodb://localhost:27017/finedge
-   ```
-
-3. **Start server:**
-=======
 2. **Set up MongoDB:**
    
    **Option A: Local MongoDB**
@@ -291,7 +238,6 @@ FinEdge_C17_Group4/
    ```
 
 4. **Start the server:**
->>>>>>> 2efa46fa319dca3224bbfc2b497390c7850cc72f
    ```bash
    npm start
    # or for development
@@ -303,9 +249,8 @@ FinEdge_C17_Group4/
    npm test
    ```
 
-<<<<<<< HEAD
 ---
-=======
+
 ## 🗄️ Database
 
 This project uses **MongoDB** with **Mongoose ODM** for data persistence.
@@ -330,6 +275,8 @@ All schemas are defined in `src/models/schemas/`:
 - ✅ Indexes for optimized queries
 - ✅ Automatic `_id` to `id` transformation in JSON responses
 - ✅ Support for filtering and querying
+
+---
 
 ## ✅ Data Validation
 
@@ -360,7 +307,8 @@ const { userRegistrationSchema } = require('../validations/userSchema');
 
 router.post('/', validateJoi(userRegistrationSchema), controller.create);
 ```
->>>>>>> 2efa46fa319dca3224bbfc2b497390c7850cc72f
+
+---
 
 ## 📋 API Endpoints
 
@@ -396,105 +344,6 @@ router.post('/', validateJoi(userRegistrationSchema), controller.create);
 
 ---
 
-## 🗄️ Database
-
-**Technology:** MongoDB with Mongoose ODM
-
-<<<<<<< HEAD
-**Collections:**
-- `users` - User accounts
-- `transactions` - Income/expense records
-- `budgets` - Budget goals
-
-**Features:**
-- Schema validation
-- Automatic timestamps
-- Indexed queries
-- Data transformation
-=======
-**Endpoints to implement:**
-- [x] `POST /users` - Register new user
-- [x] `POST /transactions` - Add income/expense
-- [x] `GET /transactions` - Fetch all transactions
-- [x] `GET /transactions/:id` - View single transaction
-- [x] `PATCH /transactions/:id` - Update transaction
-- [x] `DELETE /transactions/:id` - Delete transaction
-- [x] `GET /summary` - Fetch income-expense summary
-
-**Files to work on:**
-- `src/models/userModel.js` - User authentication logic (with bcrypt)
-- `src/models/transactionModel.js` - Enhanced with filtering capabilities
-- `src/models/budgetModel.js` - Complete budget CRUD operations
-- `src/controllers/*.js` - Test and refine controllers
-- `src/services/*.js` - Add business logic validation
-
-**Status:** 🟡 In Progress (Structure ready, needs testing & refinement)
-
----
-
-### **Task 3: Async Programming & Middleware** (20 Points)
-**Assigned to:** [Member 3]
-
-**Requirements:**
-- [x] Use async/await for DB operations
-- [x] Global error-handling middleware
-- [x] Request logging middleware
-- [x] Transaction validation middleware
-
-**Files to work on:**
-- `src/middleware/errorHandler.js` - Enhance error handling
-- `src/middleware/requestLogger.js` - Add more logging details
-- `src/middleware/validateJoi.js` - Joi validation middleware (✅ Implemented)
-- `src/middleware/validateTransaction.js` - Complete validation rules
-- Review all async/await usage in models and services
-
-**Status:** 🟡 In Progress (Basic implementation done, needs enhancement)
-
----
-
-### **Task 4: Advanced Node Concepts** (20 Points)
-**Assigned to:** [Member 4]
-
-**Requirements:**
-- [x] Modular routes and controllers
-- [x] Reusable services for business logic
-- [x] Environment variables configuration
-- [x] Custom error classes
-- [x] MongoDB for data persistence (✅ Implemented)
-- [ ] Test cases for core endpoints
-
-**Files to work on:**
-- `src/tests/health.test.js` - Complete test suite
-- `src/tests/transaction.test.js` - Add more test cases
-- `src/tests/user.test.js` - Create user tests
-- `src/tests/summary.test.js` - Create summary tests
-- `src/utils/jwt.js` - JWT authentication utilities (✅ Implemented)
-
-**Status:** 🟡 In Progress (Structure ready, tests need completion)
-
----
-
-### **Task 5: Bonus Features** (20 Points - Choose 2)
-**Assigned to:** [Member 5 & Member 6]
-
-#### **Option A: Analytics & Reporting**
-**Assigned to:** [Member 5]
-
-**Features:**
-- [ ] Calculate total income, expenses, and balance
-- [ ] Filter transactions by category/date
-- [ ] Show monthly trends
-- [ ] Category-wise spending breakdown
-
-**Files to create/enhance:**
-- `src/services/analyticsService.js` - New service for analytics
-- `src/controllers/analyticsController.js` - New controller
-- `src/routes/analyticsRoutes.js` - New routes
-- Enhance `src/services/summaryService.js` with filtering
->>>>>>> 2efa46fa319dca3224bbfc2b497390c7850cc72f
-
----
-
 ## ✅ Key Features Implemented
 
 ### 1. MVC Architecture ✅
@@ -502,7 +351,6 @@ router.post('/', validateJoi(userRegistrationSchema), controller.create);
 - Reusable services for business logic
 - Modular route definitions
 
-<<<<<<< HEAD
 ### 2. Async/Await ✅
 - All database operations use async/await
 - Proper error handling with try/catch
@@ -543,65 +391,6 @@ router.post('/', validateJoi(userRegistrationSchema), controller.create);
 
 ---
 
-=======
-**Files to create:**
-- `src/services/aiService.js` - AI/automation logic
-- `src/utils/categoryMatcher.js` - Keyword matching for auto-categorization
-- `src/services/budgetSuggestionService.js` - Budget suggestions
-
----
-
-#### **Option C: Data Persistence** ✅ Already Implemented
-- MongoDB database integration (✅ Implemented)
-- Mongoose ODM for schema management
-- Automatic timestamps and data validation
-
----
-
-#### **Option D: Advanced Middleware** ✅ Partially Implemented
-**Assigned to:** [Member 3 or Member 4]
-
-**Features:**
-- [x] Rate limiter for requests
-- [x] CORS middleware
-- [x] Request logging
-- [x] In-memory cache service with TTL expiry (used in `/summary`)
-
-**Files to enhance:**
-- `src/middleware/rateLimiter.js` - Apply to routes
-- `src/utils/cacheService.js` - Already implemented, enhance if needed
-
----
-
-## 🔐 JWT Authentication (Bonus) ✅ Implemented
-
-**Files:**
-- `src/middleware/authMiddleware.js` - JWT verification (✅ Implemented)
-- `src/utils/jwt.js` - JWT token generation/verification (✅ Implemented)
-- Update routes to use auth middleware (in progress)
-
-## 📝 Development Guidelines
-
-### Code Style
-- Use async/await for all async operations
-- Follow MVC architecture strictly
-- Keep controllers thin, business logic in services
-- Use custom error classes for error handling
-- Add JSDoc comments for functions
-
-### Testing
-- Write tests for all endpoints
-- Test error cases
-- Test validation middleware
-- Aim for >80% code coverage
-
-### Git Workflow
-1. Create feature branches: `git checkout -b feature/task-name`
-2. Commit frequently with clear messages
-3. Push and create pull requests
-4. Review code before merging
-
->>>>>>> 2efa46fa319dca3224bbfc2b497390c7850cc72f
 ## 🧪 Testing
 
 **Test Results:**
@@ -628,16 +417,9 @@ npm test
 - `express` - Web framework
 - `mongoose` - MongoDB ODM
 - `dotenv` - Environment variables
-<<<<<<< HEAD
 - `joi` - Data validation
 - `jsonwebtoken` - JWT authentication
 - `bcrypt` - Password hashing
-=======
-- `mongoose` - MongoDB ODM
-- `jsonwebtoken` - JWT authentication
-- `bcrypt` - Password hashing
-- `joi` - Data validation
->>>>>>> 2efa46fa319dca3224bbfc2b497390c7850cc72f
 - `cors` - CORS middleware
 - `express-rate-limit` - Rate limiting
 
@@ -741,7 +523,6 @@ npm test
 - ✅ Async/Await Programming
 - ✅ Middleware Implementation
 - ✅ Error Handling
-<<<<<<< HEAD
 - ✅ MongoDB Integration
 - ✅ Data Validation
 - ✅ JWT Authentication
@@ -765,44 +546,3 @@ For issues or questions:
 **Project Status: ✅ Complete and Evaluation Ready**
 
 **All requirements met with additional bonus features implemented.**
-=======
-- ✅ MongoDB Database Integration
-- ✅ Mongoose ODM
-- ✅ Joi Data Validation
-- ✅ JWT Authentication
-- ✅ Password Hashing (bcrypt)
-- ✅ Environment Variables
-- ✅ Modular Code Structure
-- ✅ Testing with Jest
-- ✅ Caching Strategy
-- ✅ Rate Limiting
-
-## 📞 Next Steps
-
-1. **Divide tasks** among group members based on the breakdown above
-2. **Set up development environment** - Each member should:
-   - Clone the repository
-   - Run `npm install`
-   - Set up MongoDB (local or Atlas)
-   - Create `.env` file from `.env.example` and configure `MONGO_URL`
-   - Test `/health` endpoint
-   - Verify MongoDB connection on server start
-3. **Start implementing** assigned tasks
-4. **Regular sync meetings** to discuss progress and merge conflicts
-5. **Test thoroughly** before final submission
-
-## 🐛 Troubleshooting
-
-- **Port already in use:** Change `PORT` in `.env`
-- **MongoDB connection errors:** 
-  - Ensure MongoDB is running (local) or check Atlas connection string
-  - Verify `MONGO_URL` in `.env` is correct
-  - Check network/firewall settings for Atlas
-- **Module not found:** Run `npm install` again
-- **Validation errors:** Check Joi schema definitions in `src/validations/`
-- **JWT errors:** Verify `JWT_SECRET` is set in `.env`
-
----
-
-**Good luck with your project! 🚀**
->>>>>>> 2efa46fa319dca3224bbfc2b497390c7850cc72f
