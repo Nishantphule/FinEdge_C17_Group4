@@ -67,8 +67,14 @@ class CacheService {
 const cacheService = new CacheService();
 
 // Clean expired entries every 5 minutes
-setInterval(() => {
+// Use unref() in test environment to allow Jest to exit
+const intervalId = setInterval(() => {
   cacheService.cleanExpired();
 }, 5 * 60 * 1000);
+
+// In test environment, unref the interval so Jest can exit
+if (process.env.NODE_ENV === 'test') {
+  intervalId.unref();
+}
 
 module.exports = cacheService;

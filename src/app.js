@@ -11,6 +11,8 @@ const healthRoutes = require('./routes/healthRoutes');
 const userRoutes = require('./routes/userRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const summaryRoutes = require('./routes/summaryRoutes');
+const analyticsRoutes = require('./routes/analyticsRoutes');
+const aiRoutes = require('./routes/aiRoutes');
 
 // Middleware
 app.use(cors());
@@ -23,6 +25,8 @@ app.use('/health', healthRoutes);
 app.use('/users', userRoutes);
 app.use('/transactions', transactionRoutes);
 app.use('/summary', summaryRoutes);
+app.use('/analytics', analyticsRoutes);
+app.use('/ai', aiRoutes);
 
 // Global error handler (must be last)
 app.use(errorHandler);

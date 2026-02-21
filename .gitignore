@@ -37,4 +37,6 @@ data/*.json
 dist/
 build/
 
+# Documentation (keep README.md)
 *.md
+!README.md

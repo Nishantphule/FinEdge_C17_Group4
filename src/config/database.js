@@ -11,9 +11,16 @@ async function initializeDatabase() {
       throw new Error('MONGO_URL environment variable is not set');
     }
     
+    // If already connected, return
+    if (mongoose.connection.readyState === 1) {
+      return;
+    }
+    
     await mongoose.connect(MONGO_URL);
     
-    console.log('✅ MongoDB connected successfully');
+    if (process.env.NODE_ENV !== 'test') {
+      console.log('✅ MongoDB connected successfully');
+    }
     
     // Handle connection events
     mongoose.connection.on('error', (err) => {
