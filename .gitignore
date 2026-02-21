@@ -37,6 +37,8 @@ data/*.json
 dist/
 build/
 
-# Documentation (keep README.md)
+# Documentation (keep README.md and PR files)
 *.md
 !README.md
+!PR_DESCRIPTION.md
+!PR_INSTRUCTIONS.md
